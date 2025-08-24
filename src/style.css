@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  min-height: 100vh;
+  color: white; /* biar teks kelihatan */
+}
