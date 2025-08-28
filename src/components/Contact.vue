@@ -1,6 +1,6 @@
 <template>
-  <section id="contact" class="mb-15 scroll-mt-30">
-    <div class="text-center mb-10">
+  <section id="contact" class="mb-15 scroll-mt-23">
+    <div class="text-center mb-5">
       <h3
         class="text-3xl md:text-4xl font-bold text-white inline-block border-b-4 border-blue-600 pb-2"
       >
@@ -8,7 +8,8 @@
       </h3>
     </div>
     <form
-      class="max-w-lg mx-auto bg-transparent p-6 rounded-2xl space-y-5 border-2 border-blue-600 shadow-[0_0_10px_#2c75ff,0_0_22px_#2c75ff]"
+      ref="contactForm"
+      class="max-w-lg mx-auto bg-transparent p-6 rounded-2xl space-y-5 border-2 border-blue-600 shadow-[0_0_10px_#2c75ff,0_0_22px_#2c75ff] animate-fade"
       @submit.prevent="handleSubmit"
     >
       <!-- Name -->
@@ -21,6 +22,21 @@
           id="name"
           v-model="form.name"
           placeholder="Your name"
+          required
+          class="mt-2 block w-full rounded-lg border-2 border-blue-600 p-3"
+        />
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label for="phone" class="block text-sm font-medium text-white"
+          >Phone</label
+        >
+        <input
+          type="tel"
+          id="phone"
+          v-model="form.phone"
+          placeholder="Your phone number"
           required
           class="mt-2 block w-full rounded-lg border-2 border-blue-600 p-3"
         />
@@ -51,8 +67,8 @@
           v-model="form.message"
           placeholder="Your message"
           required
-          rows="4"
-          class="mt-2 block w-full rounded-lg border-2 border-blue-600 p-3"
+          rows="2"
+          class="mt-2 block w-full rounded-lg border-2 border-blue-600 p-3 h-20"
         ></textarea>
       </div>
 
@@ -61,7 +77,7 @@
         type="submit"
         class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow hover:bg-white hover:text-blue-600 transition"
       >
-        Open Email App
+        Send via WhatsApp
       </button>
     </form>
   </section>
@@ -74,29 +90,58 @@ export default {
     return {
       form: {
         name: "",
+        phone: "",
         email: "",
         message: "",
       },
-      recipientEmail: "irfanjarulloh89@gmail.com", // email tujuan (misalnya milikmu)
+      recipientPhone: "6281299981774", // nomor WA tujuan
     };
   },
   methods: {
     handleSubmit() {
-      // bikin isi email
-      const subject = encodeURIComponent(`Message from ${this.form.name}`);
-      const body = encodeURIComponent(
-        `Name: ${this.form.name}\nEmail: ${this.form.email}\nMessage: ${this.form.message}`
+      const text = encodeURIComponent(
+        `Halo, saya ${this.form.name}\n` +
+          `Phone: ${this.form.phone}\n` +
+          `Email: ${this.form.email}\n` +
+          `Pesan: ${this.form.message}`
       );
 
-      // mailto link
-      const mailtoLink = `mailto:${this.recipientEmail}?subject=${subject}&body=${body}`;
-
-      // pindah ke aplikasi email si pengirim
-      window.location.href = mailtoLink;
+      const waLink = `https://wa.me/${this.recipientPhone}?text=${text}`;
+      window.open(waLink, "_blank");
 
       // reset form
-      this.form = { name: "", email: "", message: "" };
+      this.form = { name: "", phone: "", email: "", message: "" };
     },
+  },
+  mounted() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show"); // biar bisa animasi lagi kalau scroll balik
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(this.$refs.contactForm);
   },
 };
 </script>
+
+<style scoped>
+/* Animasi fade + slide */
+.animate-fade {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease;
+}
+
+.animate-fade.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>

@@ -108,11 +108,16 @@ const projects = ref([
     title: "Undangan Digital",
     description:
       "Undangan Digital sederhana menggunakan Html, Css, Bootstrap & Javascript Tampilan responsif dan user-friendly",
-    image:
-      Undangan,
+    image: Undangan,
     github: "https://github.com/irfanjarulloh25/undangan-digital",
     technologies: ["Html", "Bootstrap", "Javascript"],
-    features: ["Cover / Opening Page", "Countdown Timer", "Profil / Informasi Acara", "Peta Lokasi (Google Maps Embed)", "Galeri Foto / Video"],
+    features: [
+      "Cover / Opening Page",
+      "Countdown Timer",
+      "Profil / Informasi Acara",
+      "Peta Lokasi (Google Maps Embed)",
+      "Galeri Foto / Video",
+    ],
   },
 ]);
 
@@ -137,16 +142,17 @@ const closeProjectModal = () => {
 
 <template>
   <section id="projects" class="scroll-mt-25">
-    <!-- Projects Grid -->
+    <!-- Section Title -->
     <div class="text-center mb-10">
       <h3
-        class="text-3xl md:text-4xl font-bold text-white inline-block border-b-4 border-blue-600 pb-2"
+        class="text-xl sm:text-2xl md:text-4xl font-bold text-white inline-block border-b-4 border-blue-600 pb-2"
       >
         My Projects
       </h3>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-[10rem]">
+      <!-- Project Grid -->
       <div
         class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center"
       >
@@ -156,7 +162,7 @@ const closeProjectModal = () => {
           class="project-card bg-transparent border-2 border-blue-600 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_10px_#2c75ff,0_0_22px_#2c75ff] w-full max-w-xs"
         >
           <div
-            class="h-36 sm:h-48 overflow-hidden flex justify-center items-center"
+            class="h-28 sm:h-40 md:h-48 overflow-hidden flex justify-center items-center"
           >
             <img
               :src="project.image"
@@ -165,24 +171,21 @@ const closeProjectModal = () => {
             />
           </div>
 
-          <div class="p-6 text-center pt-2">
+          <div class="p-4 sm:p-6 text-center pt-2">
             <span
-              class="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full mb-2"
+              class="inline-block px-2 py-1 text-[10px] sm:text-xs md:text-sm font-semibold bg-blue-100 text-blue-800 rounded-full mb-2"
             >
               {{ project.category }}
             </span>
             <h3
-              class="text-base sm:text-xl font-semibold text-white mb-2 px-0 sm:px-0 break-words text-center"
+              class="text-sm sm:text-base md:text-lg font-semibold text-white mb-2 break-words text-center"
             >
               {{ project.title }}
             </h3>
-            <p class="text-gray-300 text-sm mb-4 break-words">
-              {{ project.description }}
-            </p>
 
             <div class="flex justify-center items-center gap-4">
               <button
-                class="view-project text-white hover:text-blue-600 text-lg sm:text-xl font-medium"
+                class="view-project text-white hover:text-blue-600 text-sm sm:text-base md:text-lg font-medium"
                 @click="openProjectModal(project)"
               >
                 View Details
@@ -192,10 +195,11 @@ const closeProjectModal = () => {
         </div>
       </div>
 
+      <!-- Tampilkan Semua -->
       <div class="flex justify-center mt-6">
         <button
           @click="showAll = !showAll"
-          class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 transition"
+          class="px-4 sm:px-6 py-1 sm:py-2 bg-blue-600 text-white rounded-full text-sm sm:text-base hover:bg-white hover:text-blue-600 transition"
         >
           {{ showAll ? "Tampilkan Lebih Sedikit" : "Lihat Semua" }}
         </button>
@@ -217,7 +221,7 @@ const closeProjectModal = () => {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
+            class="h-5 w-5 sm:h-6 sm:w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -241,43 +245,56 @@ const closeProjectModal = () => {
         </div>
 
         <!-- Konten kanan -->
-        <div class="md:w-1/2 p-6 flex flex-col justify-between">
+        <div class="md:w-1/2 p-4 sm:p-6 flex flex-col justify-between">
           <div>
-            <h3 class="text-2xl font-bold text-gray-800 mb-2">
+            <h3
+              class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2"
+            >
               {{ selectedProject.title }}
             </h3>
             <span
-              class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 mb-4"
+              class="inline-block px-2 py-1 text-[10px] sm:text-xs md:text-sm rounded-full bg-blue-100 text-blue-800 mb-4"
               >{{ selectedProject.category }}</span
             >
 
-            <h5 class="font-medium text-gray-700">Overview</h5>
-            <p class="text-gray-600 mb-4">{{ selectedProject.description }}</p>
+            <h5 class="font-medium text-gray-700 text-sm sm:text-base">
+              Overview
+            </h5>
+            <p class="text-gray-600 mb-4 text-sm sm:text-base">
+              {{ selectedProject.description }}
+            </p>
 
-            <h5 class="font-medium text-gray-700">Technologies Used</h5>
+            <h5 class="font-medium text-gray-700 text-sm sm:text-base">
+              Technologies Used
+            </h5>
             <div class="flex flex-wrap gap-2 mt-2 mb-4">
               <span
                 v-for="tech in selectedProject.technologies"
                 :key="tech"
-                class="px-2 py-1 bg-blue-600 rounded"
+                class="px-2 py-1 bg-blue-600 rounded text-xs sm:text-sm md:text-base"
                 >{{ tech }}</span
               >
             </div>
 
-            <h5 class="font-medium text-gray-700">Key Features</h5>
-            <ul class="list-disc list-inside text-gray-600 space-y-1 mb-4">
+            <h5 class="font-medium text-gray-700 text-sm sm:text-base">
+              Key Features
+            </h5>
+            <ul
+              class="list-disc list-inside text-gray-600 space-y-1 mb-4 text-sm sm:text-base"
+            >
               <li v-for="feature in selectedProject.features" :key="feature">
                 {{ feature }}
               </li>
             </ul>
           </div>
 
+          <!-- Tombol Demo & Code -->
           <div class="pt-2 flex space-x-4">
             <a
               v-if="selectedProject.demo"
               :href="selectedProject.demo"
               target="_blank"
-              class="flex items-center text-blue-600 hover:text-blue-800"
+              class="flex items-center text-blue-600 hover:text-blue-800 text-sm sm:text-base"
             >
               View Demo
             </a>
@@ -285,10 +302,13 @@ const closeProjectModal = () => {
               v-if="selectedProject.github"
               :href="selectedProject.github"
               target="_blank"
-              class="flex items-center text-blue-600 hover:text-blue-800"
+              class="flex items-center text-blue-600 hover:text-blue-800 text-sm sm:text-base"
             >
               View Code
-              <FontAwesomeIcon :icon="['fab', 'github']" class="text-3xl" />
+              <FontAwesomeIcon
+                :icon="['fab', 'github']"
+                class="text-xl sm:text-2xl ml-1"
+              />
             </a>
           </div>
         </div>

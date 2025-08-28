@@ -11,7 +11,8 @@ import {
   faVuejs,
   faNodeJs,
   faReact,
-  faBootstrap, faPhp,
+  faBootstrap,
+  faPhp,
 } from "@fortawesome/free-brands-svg-icons";
 
 // Skill list
@@ -45,15 +46,30 @@ const containerRef = ref(null);
 const windowWidth = ref(window.innerWidth);
 const updateWidth = () => (windowWidth.value = window.innerWidth);
 
+const isVisible = ref(false);
+
 onMounted(() => {
+  // Observer untuk animasi scroll
+  const section = document.getElementById("skills");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        isVisible.value = true;
+      } else {
+        isVisible.value = false; // reset kalau keluar layar
+      }
+    },
+    { threshold: 0.2 }
+  );
+  observer.observe(section);
+
   // Update orbit radius
   const updateRadius = () => {
     if (containerRef.value) {
       const w = containerRef.value.clientWidth;
 
-      // Jika layar < 768px, orbit lebih besar supaya skill tidak berdempetan
       if (window.innerWidth < 768) {
-        orbitRadius.value = Math.max(120, w / 2); // radius minimal 120px
+        orbitRadius.value = Math.max(120, w / 2); // mobile
       } else {
         orbitRadius.value = Math.min(160, w / 2.5); // desktop
       }
@@ -71,113 +87,126 @@ onUnmounted(() => {
 
 <template>
   <section id="skills" class="scroll-mt-30">
-  <!-- Judul -->
-  <div class="text-center mb-10">
-    <h3
-      class="text-3xl md:text-4xl font-bold text-white inline-block border-b-4 border-blue-600 pb-2"
+    <!-- Judul -->
+    <div class="text-center mb-10">
+      <h3
+        class="text-3xl md:text-4xl font-bold text-white inline-block border-b-4 border-blue-600 pb-2 transition-all duration-1000"
+        :class="
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
+        "
+      >
+        My Skills
+      </h3>
+    </div>
+
+    <!-- Container utama -->
+    <div
+      class="relative flex flex-col md:flex-row items-center bg-transparent text-white border-2 border-blue-600 rounded-xl shadow-[0_0_10px_#2c75ff,0_0_22px_#2c75ff] w-11/12 md:w-4/5 lg:w-2/3 h-auto md:h-[28rem] mx-auto mt-6 p-6 mb-40 transition-all duration-1000 ease-out"
+      :class="isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'"
     >
-      My Skills
-    </h3>
-  </div>
-
-  <!-- Container utama -->
-  <div
-    class="relative flex flex-col md:flex-row items-center bg-transparent text-white border-2 border-blue-600 rounded-xl shadow-[0_0_10px_#2c75ff,0_0_22px_#2c75ff] w-11/12 md:w-4/5 lg:w-2/3 h-auto md:h-[28rem] mx-auto mt-6 p-6 mb-40"
-  >
-    <div class="flex flex-col md:flex-row items-center w-full gap-8">
-      <!-- Kiri: Robot + orbit -->
-      <div
-        ref="containerRef"
-        class="relative w-11/12 md:w-1/2 flex justify-center items-center min-h-[360px]"
-      >
-        <!-- Robot -->
-        <img
-          :src="robotImg"
-          alt="Robot"
-          class="rounded-full z-10 transition-all"
-          :class="
-            windowWidth < 768
-              ? 'w-44 h-44'
-              : windowWidth < 1024
-              ? 'w-40 h-40'
-              : 'w-56 h-56'
-          "
-        />
-
-        <!-- Lingkaran orbit -->
-        <svg class="absolute top-0 left-0 w-full h-full pointer-events-none">
-          <circle
-            :cx="'50%'"
-            :cy="'50%'"
-            :r="orbitRadius"
-            stroke="#2c75ff"
-            stroke-width="2"
-            fill="none"
-          />
-        </svg>
-
-        <!-- Skill -->
+      <div class="flex flex-col md:flex-row items-center w-full gap-8">
+        <!-- Kiri: Robot + orbit -->
         <div
-          v-for="skill in skills"
-          :key="skill.name"
-          class="group relative flex justify-center items-center rounded-full bg-black border-2 border-blue-600 shadow-[0_0_5px_#2c75ff,0_0_10px_#2c75ff] hover:scale-110 transition-all z-20"
-          :class="skill.color"
-          :style="{
-            width: windowWidth < 768 ? '3rem' : '3.5rem',
-            height: windowWidth < 768 ? '3rem' : '3.5rem',
-            top: `calc(50% + ${
-              Math.sin((skill.angle * Math.PI) / 180) * orbitRadius
-            }px - ${windowWidth < 768 ? 24 : 28}px)`,
-            left: `calc(50% + ${
-              Math.cos((skill.angle * Math.PI) / 180) * orbitRadius
-            }px - ${windowWidth < 768 ? 24 : 28}px)`,
-            position: 'absolute',
-          }"
+          ref="containerRef"
+          class="relative w-11/12 md:w-1/2 flex justify-center items-center min-h-[360px] transition-all duration-1000 delay-200"
+          :class="
+            isVisible
+              ? 'opacity-100 translate-x-0'
+              : 'opacity-0 -translate-x-10'
+          "
         >
-          <!-- Icon -->
-          <template v-if="skill.icon">
-            <FontAwesomeIcon
-              :icon="skill.icon"
-              class="text-2xl md:text-3xl z-10"
-            />
-          </template>
+          <!-- Robot -->
+          <img
+            :src="robotImg"
+            alt="Robot"
+            class="rounded-full z-10 transition-all"
+            :class="
+              windowWidth < 768
+                ? 'w-44 h-44'
+                : windowWidth < 1024
+                ? 'w-40 h-40'
+                : 'w-56 h-56'
+            "
+          />
 
-          <!-- Gambar (misal Tailwind) -->
-          <template v-else-if="skill.img">
-            <img
-              :src="skill.img"
-              alt="skill.name"
-              class="w-8 md:w-10 h-8 md:h-10 z-5"
+          <!-- Lingkaran orbit -->
+          <svg class="absolute top-0 left-0 w-full h-full pointer-events-none">
+            <circle
+              :cx="'50%'"
+              :cy="'50%'"
+              :r="orbitRadius"
+              stroke="#2c75ff"
+              stroke-width="2"
+              fill="none"
             />
-          </template>
+          </svg>
 
-          <!-- Tooltip -->
-          <span
-            class="absolute px-2 py-1 text-sm rounded bg-blue-600 text-white opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 whitespace-nowrap z-50"
+          <!-- Skill -->
+          <div
+            v-for="skill in skills"
+            :key="skill.name"
+            class="group relative flex justify-center items-center rounded-full bg-black border-2 border-blue-600 shadow-[0_0_5px_#2c75ff,0_0_10px_#2c75ff] hover:scale-110 transition-all z-20"
+            :class="skill.color"
+            :style="{
+              width: windowWidth < 768 ? '3rem' : '3.5rem',
+              height: windowWidth < 768 ? '3rem' : '3.5rem',
+              top: `calc(50% + ${
+                Math.sin((skill.angle * Math.PI) / 180) * orbitRadius
+              }px - ${windowWidth < 768 ? 24 : 28}px)`,
+              left: `calc(50% + ${
+                Math.cos((skill.angle * Math.PI) / 180) * orbitRadius
+              }px - ${windowWidth < 768 ? 24 : 28}px)`,
+              position: 'absolute',
+            }"
           >
-            {{ skill.name }}
-          </span>
-        </div>
-      </div>
+            <!-- Icon -->
+            <template v-if="skill.icon">
+              <FontAwesomeIcon
+                :icon="skill.icon"
+                class="text-2xl md:text-3xl z-10"
+              />
+            </template>
 
-      <!-- Kanan: Text skill -->
-      <div
-        class="md:w-1/2 text-center md:text-left flex flex-col justify-center px-4 md:px-0"
-      >
-        <div class="mb-4">
-          <h3 class="text-xl font-semibold mb-2 text-blue-400">Frontend</h3>
-          <p class="text-base md:text-lg text-white text-center md:text-left">
-            HTML, CSS, JavaScript, PHP, Vue.js, React.js, TailwindCSS, Bootstrap
-          </p>
+            <!-- Gambar (misal Tailwind) -->
+            <template v-else-if="skill.img">
+              <img
+                :src="skill.img"
+                alt="skill.name"
+                class="w-8 md:w-10 h-8 md:h-10 z-5"
+              />
+            </template>
+
+            <!-- Tooltip -->
+            <span
+              class="absolute px-2 py-1 text-sm rounded bg-blue-600 text-white opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 whitespace-nowrap z-50"
+            >
+              {{ skill.name }}
+            </span>
+          </div>
         </div>
-        <div>
-          <h3 class="text-xl font-semibold mb-2 text-blue-400">Backend</h3>
-          <p class="text-base md:text-lg text-white text-center md:text-left">
-            Node.js, Express.js, MongoDB, SQL
-          </p>
+
+        <!-- Kanan: Text skill -->
+        <div
+          class="md:w-1/2 text-center md:text-left flex flex-col justify-center px-4 md:px-0 transition-all duration-1000 delay-300"
+          :class="
+            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+          "
+        >
+          <div class="mb-4">
+            <h3 class="text-xl font-semibold mb-2 text-blue-400">Frontend</h3>
+            <p class="text-base md:text-lg text-white text-center md:text-left">
+              HTML, CSS, JavaScript, PHP, Vue.js, React.js, TailwindCSS,
+              Bootstrap
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold mb-2 text-blue-400">Backend</h3>
+            <p class="text-base md:text-lg text-white text-center md:text-left">
+              Node.js, Express.js, MongoDB, SQL
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </section>
 </template>

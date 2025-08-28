@@ -148,7 +148,7 @@ const openModal = (image) => {
   <section id="certificate" class="scroll-mt-30">
     <div class="text-center mb-10">
       <h3
-        class="text-3xl md:text-4xl font-bold text-white inline-block border-b-4 border-blue-600 pb-2"
+        class="text-xl sm:text-2xl md:text-4xl font-bold text-white inline-block border-b-4 border-blue-600 pb-2"
       >
         Certificate
       </h3>
@@ -165,7 +165,7 @@ const openModal = (image) => {
         >
           <!-- Gambar Sertifikat -->
           <div
-            class="h-36 sm:h-48 overflow-hidden flex justify-center items-center"
+            class="h-28 sm:h-40 md:h-48 overflow-hidden flex justify-center items-center"
           >
             <img
               :src="certificate.image"
@@ -175,15 +175,15 @@ const openModal = (image) => {
           </div>
 
           <!-- Info Sertifikat -->
-          <div class="p-6 text-center pt-2">
+          <div class="p-4 sm:p-6 text-center pt-2">
             <h3
-              class="text-base sm:text-xl font-semibold text-white mb-2 px-0 sm:px-0 break-words text-center"
+              class="text-sm sm:text-base md:text-lg font-semibold text-white mb-2 break-words text-center"
             >
               {{ certificate.title }}
             </h3>
 
             <button
-              class="view-certificate text-white hover:text-blue-600 text-lg sm:text-xl font-medium"
+              class="view-certificate text-white hover:text-blue-600 text-sm sm:text-base md:text-lg font-medium"
               @click="openModal(certificate.image)"
             >
               View Details
@@ -196,14 +196,14 @@ const openModal = (image) => {
       <div class="flex justify-center mt-6 gap-5">
         <button
           @click="showAll = !showAll"
-          class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 transition"
+          class="px-4 sm:px-6 py-1 sm:py-2 bg-blue-600 text-white rounded-full text-sm sm:text-base md:text-lg hover:bg-white hover:text-blue-600 transition"
         >
           {{ showAll ? "Tampilkan Lebih Sedikit" : "Lihat Semua" }}
         </button>
         <a
           href="https://www.codepolitan.com/coders/irfanjarulloh89/"
           target="_blank"
-          class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-600 transition"
+          class="px-4 sm:px-6 py-1 sm:py-2 bg-blue-600 text-white rounded-full text-sm sm:text-base md:text-lg hover:bg-white hover:text-blue-600 transition"
         >
           View Codepolitan
         </a>
@@ -224,6 +224,7 @@ const openModal = (image) => {
     </div>
   </section>
 </template>
+
 
 <style scoped>
 .view-certificate {
